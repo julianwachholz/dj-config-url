@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-dj-database-url
-~~~~~~~~~~~~~~~
+dj-config-url
+~~~~~~~~~~~~~
 
-.. image:: https://secure.travis-ci.org/kennethreitz/dj-database-url.png?branch=master
+.. image:: https://secure.travis-ci.org/julianwachholz/dj-config-url.png?branch=master
 
-This simple Django utility allows you to utilize the
+This simple Django utility allows you to utilize
 `12factor <http://www.12factor.net/backing-services>`_ inspired
-``DATABASE_URL`` environment variable to configure your Django application.
+environment variables to configure your Django application.
 
 
 Usage
@@ -15,14 +15,21 @@ Usage
 
 Configure your database in ``settings.py`` from ``DATABASE_URL``::
 
-    DATABASES = {'default': dj_database_url.config()}
+    DATABASES = {'default': dj_config_url.config()}
 
 Parse an arbitrary Database URL::
 
-    DATABASES = {'default': dj_database_url.parse('postgres://...')}
+    DATABASES = {'default': dj_config_url.parse('postgres://...')}
 
-Supported databases
--------------------
+Configure your cache backend::
+
+    CACHES = {'default': dj_config_url.parse('memcache://...')}
+
+Supported configurations
+------------------------
+
+Databases
+^^^^^^^^^
 
 Support currently exists for PostgreSQL, PostGIS, MySQL and SQLite.
 
@@ -31,21 +38,27 @@ the hostname, and using the "file" portion as the filename of the database.
 This has the effect of four slashes being present for an absolute file path:
 ``sqlite:////full/path/to/your/database/file.sqlite``.
 
+Caches
+^^^^^^
+
+``dj-config-url`` currently supports the cache backends in the Django core:
+Database, dummy, file based, local memory and memcached.
+
 
 """
 
 from setuptools import setup
 
 setup(
-    name='dj-database-url',
-    version='0.3.0',
-    url='https://github.com/kennethreitz/dj-database-url',
+    name='dj-config-url',
+    version='0.1.0',
+    url='https://github.com/julianwachholz/dj-config-url',
     license='BSD',
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    description='Use Database URLs in your Django Application.',
+    author='Julian Wachholz',
+    author_email='julian@wachholz.ch',
+    description='Use configuration URLs in your Django Application.',
     long_description=__doc__,
-    py_modules=['dj_database_url'],
+    py_modules=['dj_config_url', 'dj_database_url'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
@@ -64,5 +77,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
     ]
 )

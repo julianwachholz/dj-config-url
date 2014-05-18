@@ -1,2 +1,4 @@
+PYTHON = python
+
 test:
-	python test_dj_database_url.py
+	$(PYTHON) test_dj_config_url.py
