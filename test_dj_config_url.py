@@ -100,6 +100,17 @@ class DatabaseTestSuite(unittest.TestCase):
 
         self.assertEqual(url['ENGINE'], engine)
 
+    def test_database_options_parsing(self):
+        url = 'postgres://user:pass@host:1234/dbname?conn_max_age=600'
+        url = dj_config_url.parse(url)
+        self.assertEqual(url['CONN_MAX_AGE'], 600)
+
+        url = 'mysql://user:pass@host:1234/dbname?init_command=SET storage_engine=INNODB'
+        url = dj_config_url.parse(url)
+        self.assertEqual(url['OPTIONS'], {
+            'init_command': 'SET storage_engine=INNODB',
+        })
+
 
 class CacheTestSuite(unittest.TestCase):
 

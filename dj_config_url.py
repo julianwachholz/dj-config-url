@@ -42,6 +42,8 @@ DB_SCHEMES = {
     'sqlite': 'django.db.backends.sqlite3',
 }
 
+_DB_BASE_OPTIONS = ['CONN_MAX_AGE', 'ATOMIC_REQUESTS', 'AUTOCOMMIT']
+
 CACHE_SCHEMES = {
     'dbcache': 'django.core.cache.backends.db.DatabaseCache',
     'dummycache': 'django.core.cache.backends.dummy.DummyCache',
@@ -72,6 +74,10 @@ def cache_config(env=DEFAULT_CACHE_ENV, default=None, engine=None):
     return config(env, default, engine)
 
 
+# return int if possible
+_cast_int = lambda v: int(v) if isinstance(v, str) and v.isdigit() else v
+
+
 def _parse_db(url, engine=None):
     """Parses a database config url."""
     config = {}
@@ -93,6 +99,15 @@ def _parse_db(url, engine=None):
         'HOST': url.hostname or '',
         'PORT': url.port or '',
     })
+
+    if url.query:
+        config_options = {}
+        for k, v in urlparse.parse_qs(url.query).items():
+            if k.upper() in _DB_BASE_OPTIONS:
+                config.update({k.upper(): _cast_int(v[0])})
+            else:
+                config_options.update({k: _cast_int(v[0])})
+        config['OPTIONS'] = config_options
 
     if engine:
         config['ENGINE'] = engine
@@ -125,11 +140,9 @@ def _parse_cache(url, backend):
         })
 
     if url.query:
-        cast_int = lambda v: int(v) if isinstance(v, str) and v.isdigit() else v
         config_options = {}
-
         for k, v in urlparse.parse_qs(url.query).items():
-            opt = {k.upper(): cast_int(v[0])}
+            opt = {k.upper(): _cast_int(v[0])}
             if k.upper() in _CACHE_BASE_OPTIONS:
                 config.update(opt)
             else:
