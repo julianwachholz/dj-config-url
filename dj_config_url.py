@@ -67,6 +67,11 @@ def config(env=DEFAULT_DB_ENV, default=None, engine=None):
     return config
 
 
+def cache_config(env=DEFAULT_CACHE_ENV, default=None, engine=None):
+    """Returns a config dictionary, defaulting to CACHE_URL."""
+    return config(env, default, engine)
+
+
 def _parse_db(url, engine=None):
     """Parses a database config url."""
     config = {}
