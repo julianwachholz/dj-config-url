@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='dj-config-url',
-    version='0.1.0',
+    version='0.1.1',
     url='https://github.com/julianwachholz/dj-config-url',
     license='BSD',
     author='Julian Wachholz',
