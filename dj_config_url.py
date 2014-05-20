@@ -25,6 +25,7 @@ urlparse.uses_netloc.append('filecache')
 urlparse.uses_netloc.append('locmemcache')
 urlparse.uses_netloc.append('memcache')
 urlparse.uses_netloc.append('pymemcache')
+urlparse.uses_netloc.append('rediscache')
 
 
 DEFAULT_DB_ENV = 'DATABASE_URL'
@@ -51,6 +52,7 @@ CACHE_SCHEMES = {
     'locmemcache': 'django.core.cache.backends.locmem.LocMemCache',
     'memcache': 'django.core.cache.backends.memcached.MemcachedCache',
     'pymemcache': 'django.core.cache.backends.memcached.PyLibMCCache',
+    'rediscache': 'redis_cache.cache.RedisCache',
 }
 
 _CACHE_BASE_OPTIONS = ['TIMEOUT', 'KEY_PREFIX', 'VERSION', 'KEY_FUNCTION']
@@ -134,7 +136,7 @@ def _parse_cache(url, backend):
             'LOCATION': url.netloc + url.path,
         })
 
-    if url.path and url.scheme in ['memcache', 'pymemcache']:
+    if url.path and url.scheme in ['memcache', 'pymemcache', 'rediscache']:
         config.update({
             'LOCATION': 'unix:' + url.path,
         })

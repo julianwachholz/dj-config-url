@@ -191,6 +191,23 @@ class CacheTestSuite(unittest.TestCase):
         self.assertEqual(url['BACKEND'], 'django.core.cache.backends.dummy.DummyCache')
         self.assertEqual(url['LOCATION'], '')
 
+    def test_redis_parsing(self):
+        url = 'rediscache://127.0.0.1:6379:1?client_class=redis_cache.client.DefaultClient&password=secret'
+        url = dj_config_url.parse(url)
+
+        self.assertEqual(url['BACKEND'], 'redis_cache.cache.RedisCache')
+        self.assertEqual(url['LOCATION'], '127.0.0.1:6379:1')
+        self.assertEqual(url['OPTIONS'], {
+            'CLIENT_CLASS': 'redis_cache.client.DefaultClient',
+            'PASSWORD': 'secret',
+        })
+
+    def test_redis_socket_parsing(self):
+        url = 'rediscache:///path/to/socket:1'
+        url = dj_config_url.parse(url)
+        self.assertEqual(url['BACKEND'], 'redis_cache.cache.RedisCache')
+        self.assertEqual(url['LOCATION'], 'unix:/path/to/socket:1')
+
     def test_options_parsing(self):
         url = 'filecache:///var/tmp/django_cache?timeout=60&max_entries=1000&cull_frequency=0'
         url = dj_config_url.parse(url)
