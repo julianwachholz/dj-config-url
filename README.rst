@@ -1,6 +1,12 @@
 DJ-Config-URL
 ~~~~~~~~~~~~~
 
+Deprecation warning
+-------------------
+
+dj-config-url is no longer maintained.
+I strongly recommend https://github.com/joke2k/django-environ.
+
 .. image:: https://secure.travis-ci.org/julianwachholz/dj-config-url.png?branch=master
    :target: http://travis-ci.org/julianwachholz/dj-config-url
 
